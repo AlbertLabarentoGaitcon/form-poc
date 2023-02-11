@@ -4,9 +4,9 @@ export function Form(props) {
   return <Decorated.Form {...props} className="form-control" />;
 }
 
-export function Input({ label, ...rest }) {
+export function Input({ label, size = 12, ...rest }) {
   return (
-    <div className="mb-3 col-md-6">
+    <div className={`mb-3 col-md-${size}`}>
       <label className="form-label">{label}</label>
       <Decorated.Input {...rest} className="form-control" />
     </div>
