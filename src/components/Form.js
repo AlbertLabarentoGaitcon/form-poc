@@ -1,21 +1,40 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
 
 var FormContext = null;
-export function Form({ children, onSubmit, methods, ...rest }) {
-  const { handleSubmit } = methods;
+export function Form({ onReset, defaultValues, children, onSubmit, ...rest }) {
+  const methods = useForm({
+    defaultValues,
+  });
+  const { handleSubmit, reset } = methods;
   FormContext = React.createContext({ methods });
+  const decoratedOnReset = (event) => {
+    event.preventDefault();
+    console.log(methods.getValues());
+    onReset(Event);
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} {...rest}>
-      {React.Children.map(children, (child) => {
-        return child;
-      })}
+    <form
+      onReset={decoratedOnReset}
+      onSubmit={handleSubmit(onSubmit)}
+      {...rest}
+    >
+      {children}
     </form>
   );
 }
 
-export function Input({ register, name, ...rest }) {
-  return <input {...register(name)} {...rest} />;
+export function Input({ register, className, ...rest }) {
+  return (
+    <input
+      {...register(name)}
+      {...rest}
+      onChange={() => {
+        // console.log(methods.getValues());
+      }}
+    />
+  );
 }
 
 export function Select({ register, options, name, ...rest }) {
@@ -41,8 +60,8 @@ export function RowInput({ children, ...rest }) {
               ...{
                 ...child.props,
                 register: methods.register,
-                key: child.props.name
-              }
+                key: child.props.name,
+              },
             })
           : child;
       })}
