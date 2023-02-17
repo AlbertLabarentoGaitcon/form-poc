@@ -1,40 +1,45 @@
-import { Form, Input, Select, RowInput } from "../../components/FormLabeled";
-import { useForm } from "react-hook-form";
+import { Form, Input, Select, RowInput } from "../../components/SimpleForm";
+import React from "react";
 
+let RenderCounter = 0;
 export default function CustomerForm() {
-  const methods = useForm({
-    defaultValues: { firstName: "Enter Me" },
-  });
+  const defaultValues = { firstName: "Enter Me" };
   let onSubmit = (data) => console.log(data);
   let onReset = (event) => {
-    event.preventDefault();
-
-    methods.reset({
-      firstName: "",
-    });
+    console.log("On reset");
   };
 
-  return (
-    <Form onSubmit={onSubmit} methods={methods}>
-      <RowInput>
-        <Input
-          name="firstName"
-          label="First Name"
-          placeholder="Enter First Name"
-          size={4}
-          onChange={(form) => console.log(methods)}
-        />
-        <Input
-          name="lastName"
-          label="Last Name"
-          placeholder="Enter Last Name"
-          size={6}
-        />
-        <Select label="Gender" name="gender" options={["Female", "Male"]} />
-      </RowInput>
+  RenderCounter++;
 
-      <button type="submit">Submit</button>
-      <button onClick={onReset}>Clear</button>
-    </Form>
+  return (
+    <>
+      <h3>{RenderCounter}</h3>
+      <Form onReset={onReset} onSubmit={onSubmit} defaultValues={defaultValues}>
+        <RowInput>
+          <Input
+            name="firstName"
+            label="First Name"
+            placeholder="Enter First Name"
+            size={3}
+          />
+          <Input
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter Last Name"
+            size={6}
+          />
+          <Input
+            name="extension"
+            label="Extension"
+            placeholder="Enter Extension"
+            size={6}
+          />
+          <Select label="Gender" name="gender" options={["Female", "Male"]} />
+        </RowInput>
+
+        <button type="submit">Submit</button>
+        <button type="reset">Clear</button>
+      </Form>
+    </>
   );
 }
